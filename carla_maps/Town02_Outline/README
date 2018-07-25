@@ -1,0 +1,24 @@
+Generate base_map.txt from list of coordinates:
+
+-create a folder named carla(or whatever) in /apollo/modules/map/data
+-create coordinates file in /apollo/modules/tools/map_gen. The coordinates should look like this:
+1,0
+2,0
+...and so on,
+which means there will be a lane from point 1,0 to 2,0...
+
+-run the commands:
+	python map_gen_two_lanes_right_ext.py YOUR_FILE.txt base_map.txt
+	mv base_map.txt /apollo/modules/map/data/carla/
+	cd /apollo
+	dir_name=modules/map/data/carla(or whatever)
+	./scripts/generate_routing_topo_graph.sh --map_dir ${dir_name}
+	bazel-bin/modules/map/tools/sim_map_generator --map_dir=${dir_name} --output_dir=${dir_name}
+-add --map_dir=/apollo/modules/map/data/carla(or whatever) to the modules/common/data/global_flagfile.txt file
+-run ./scripts/bootstrap.sh
+
+At localhost:8888
+	activate SimControl
+	go to module controller and activate planning and routing
+	go to route editing and select a point on the lane
+	send routing request
