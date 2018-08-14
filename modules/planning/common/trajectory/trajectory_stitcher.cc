@@ -26,6 +26,7 @@
 
 #include "modules/common/configs/config_gflags.h"
 #include "modules/common/log.h"
+#include "modules/common/math/angle.h"
 #include "modules/common/math/quaternion.h"
 #include "modules/common/util/util.h"
 #include "modules/planning/common/planning_gflags.h"
@@ -56,38 +57,37 @@ TrajectoryStitcher::ComputeReinitStitchingTrajectory(
 }
 
 // only used in navigation mode
-void TrajectoryStitcher::TransformLastPublishedTrajectory(const double x_diff,
-    const double y_diff, const double theta_diff,
+void TrajectoryStitcher::TransformLastPublishedTrajectory(
+    const double x_diff, const double y_diff, const double theta_diff,
     PublishableTrajectory* prev_trajectory) {
-
   if (!prev_trajectory) {
     return;
   }
 
   // R^-1
-  auto cos_theta = std::cos(-theta_diff);
-  auto sin_theta = std::sin(-theta_diff);
+  double cos_theta = std::cos(theta_diff);
+  double sin_theta = -std::sin(theta_diff);
 
   // -R^-1 * t
   auto tx = -(cos_theta * x_diff - sin_theta * y_diff);
   auto ty = -(sin_theta * x_diff + cos_theta * y_diff);
 
   std::for_each(prev_trajectory->trajectory_points().begin(),
-      prev_trajectory->trajectory_points().end(),
-      [&cos_theta, &sin_theta, &tx, &ty, &theta_diff]
-       (common::TrajectoryPoint& p) {
-        auto x = p.path_point().x();
-        auto y = p.path_point().y();
-        auto theta = p.path_point().theta();
+                prev_trajectory->trajectory_points().end(),
+                [&cos_theta, &sin_theta, &tx, &ty,
+                 &theta_diff](common::TrajectoryPoint& p) {
+                  auto x = p.path_point().x();
+                  auto y = p.path_point().y();
+                  auto theta = p.path_point().theta();
 
-        auto x_new = cos_theta * x - sin_theta * y + tx;
-        auto y_new = sin_theta * x + cos_theta * y + ty;
-        auto theta_new = common::math::WrapAngle(theta - theta_diff);
+                  auto x_new = cos_theta * x - sin_theta * y + tx;
+                  auto y_new = sin_theta * x + cos_theta * y + ty;
+                  auto theta_new = common::math::WrapAngle(theta - theta_diff);
 
-        p.mutable_path_point()->set_x(x_new);
-        p.mutable_path_point()->set_y(y_new);
-        p.mutable_path_point()->set_theta(theta_new);
-      });
+                  p.mutable_path_point()->set_x(x_new);
+                  p.mutable_path_point()->set_y(y_new);
+                  p.mutable_path_point()->set_theta(theta_new);
+                });
 }
 
 // Planning from current vehicle state:
@@ -97,8 +97,7 @@ void TrajectoryStitcher::TransformLastPublishedTrajectory(const double x_diff,
 std::vector<TrajectoryPoint> TrajectoryStitcher::ComputeStitchingTrajectory(
     const VehicleState& vehicle_state, const double current_timestamp,
     const double planning_cycle_time,
-    const PublishableTrajectory* prev_trajectory, bool* is_replan) {
-  *is_replan = true;
+    const PublishableTrajectory* prev_trajectory) {
   if (!FLAGS_enable_trajectory_stitcher) {
     return ComputeReinitStitchingTrajectory(vehicle_state);
   }
@@ -122,8 +121,8 @@ std::vector<TrajectoryPoint> TrajectoryStitcher::ComputeStitchingTrajectory(
   const double veh_rel_time =
       current_timestamp - prev_trajectory->header_time();
 
-  std::size_t time_matched_index = prev_trajectory->QueryLowerBoundPoint(
-      veh_rel_time);
+  std::size_t time_matched_index =
+      prev_trajectory->QueryLowerBoundPoint(veh_rel_time);
 
   if (time_matched_index == 0 &&
       veh_rel_time < prev_trajectory->StartPoint().relative_time()) {
@@ -135,8 +134,8 @@ std::vector<TrajectoryPoint> TrajectoryStitcher::ComputeStitchingTrajectory(
     return ComputeReinitStitchingTrajectory(vehicle_state);
   }
 
-  auto time_matched_point = prev_trajectory->TrajectoryPointAt(
-      time_matched_index);
+  auto time_matched_point =
+      prev_trajectory->TrajectoryPointAt(time_matched_index);
 
   if (!time_matched_point.has_path_point()) {
     return ComputeReinitStitchingTrajectory(vehicle_state);
@@ -179,8 +178,7 @@ std::vector<TrajectoryPoint> TrajectoryStitcher::ComputeStitchingTrajectory(
           std::max(0, static_cast<int>(matched_index - 1)),
       prev_trajectory->trajectory_points().begin() + forward_time_index + 1);
 
-  const double zero_s = time_matched_point.path_point().s();
-
+  const double zero_s = stitching_trajectory.back().path_point().s();
   for (auto& tp : stitching_trajectory) {
     if (!tp.has_path_point()) {
       return ComputeReinitStitchingTrajectory(vehicle_state);
@@ -189,16 +187,16 @@ std::vector<TrajectoryPoint> TrajectoryStitcher::ComputeStitchingTrajectory(
                          current_timestamp);
     tp.mutable_path_point()->set_s(tp.path_point().s() - zero_s);
   }
-  *is_replan = false;
   return stitching_trajectory;
 }
 
 std::pair<double, double> TrajectoryStitcher::ComputePositionProjection(
-    const double x, const double y,
-    const TrajectoryPoint& p) {
+    const double x, const double y, const TrajectoryPoint& p) {
   Vec2d v(x - p.path_point().x(), y - p.path_point().y());
-  Vec2d n(std::cos(p.path_point().theta()),
-      std::sin(p.path_point().theta()));
+  Vec2d n(common::math::cos(
+              common::math::Angle16::from_rad(p.path_point().theta())),
+          common::math::sin(
+              common::math::Angle16::from_rad(p.path_point().theta())));
 
   std::pair<double, double> frenet_sd;
   frenet_sd.first = v.InnerProd(n) + p.path_point().s();
