@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package carla_ros_bridge;
+
+message Vector3D {
+    optional float x = 1;
+    optional float y = 2;
+    optional float z = 3;
+}
+  
+message Rotation3D {
+    optional float pitch = 1;
+    optional float yaw = 2;
+    optional float roll = 3;
+}  
+
+message SimpleMeasurements {
+    optional Vector3D location = 1;
+    optional Vector3D rotation = 2;
+    optional Vector3D angular_velocity = 3;
+    optional Vector3D linear_velocity = 4;
+    optional Vector3D acceleration = 5;
+}
