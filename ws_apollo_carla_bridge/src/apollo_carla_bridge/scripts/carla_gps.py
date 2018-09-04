@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import rospy
-from pb_msgs.msg import CorrectedImu
-from pb_msgs.msg import Gps
-from pb_msgs.msg import Pose
+from modules.localization.proto.imu_pb2 import CorrectedImu
+from modules.localization.proto.gps_pb2 import Gps
+from modules.localization.proto.pose_pb2 import Pose
 from pb_msgs.msg import Quaternion
 from pb_msgs.msg import Chassis
 from std_msgs.msg import String
@@ -61,7 +61,11 @@ def forward_gps(data, pubs):
     p.position.x = float(arr[0])
     p.position.y = -float(arr[1]) + 182.5
     p.position.z = float(arr[2])
-    p.orientation.CopyFrom(q)
+
+    p.orientation.qx = q.qx
+    p.orientation.qy = q.qy
+    p.orientation.qz = q.qz
+    p.orientation.qw = q.qw
 
     # needed for routing
     p.angular_velocity_vrf.x = float(arr[6])
