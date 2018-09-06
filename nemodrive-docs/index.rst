@@ -7,14 +7,14 @@ Welcome to apollo-carla-bridge's documentation!
 ===============================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Root Docs
+    :maxdepth: 2
+    :caption: Root Docs
 
-Root Docs <https://nemodrive-docs.readthedocs.io/en/latest/>
+    Root Docs <https://nemodrive-docs.readthedocs.io/en/latest/>
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Contents:
 
     Installation <installation>
     Config and run <config_run>
