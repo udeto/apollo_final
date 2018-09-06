@@ -1,0 +1,26 @@
+speed_control {
+    name : "carla street"
+    polygon {
+      point {
+        x: 183.06
+        y: -118.35
+        z: 0
+      }
+      point {
+        x: 181.89
+        y: -126.71
+        z: 0
+      }
+      point {
+        x: 2.96
+        y: -126.56
+        z: 0
+      }
+      point {
+        x: 3.25
+        y: -118.64
+        z: 0
+      }
+    }
+    speed_limit: 6.7 # 15mph
+}
