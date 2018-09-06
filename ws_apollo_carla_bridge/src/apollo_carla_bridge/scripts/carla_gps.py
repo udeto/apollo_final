@@ -42,6 +42,7 @@ def forward_gps(data, pubs):
         [12] acceleration.x
         [13] acceleration.y
         [14] acceleration.z
+        [15] forward_speed
     '''
     arr = data.data.split()
 
@@ -95,7 +96,7 @@ def forward_gps(data, pubs):
     pub_corrected_imu.publish(msg_corrected_imu)
     pub_gps.publish(msg_gps)
 
-    chassis[1].speed_mps = (float(arr[0])**2 + float(arr[1])**2 + float(arr[2])**2)**0.5
+    chassis[1].speed_mps = float(arr[15])
     chassis[1].gear_location = 1
 
     chassis[0].publish(chassis[1])
