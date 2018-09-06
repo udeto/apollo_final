@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import rospy
 
-from pb_msgs.msg import Chassis
-from pb_msgs.msg import ChassisDetail
-from pb_msgs.msg import Eps
-from pb_msgs.msg import CheckResponseSignal
+from modules.canbus.proto.chassis_pb2 import Chassis
+# from pb_msgs.msg import ChassisDetail
+# from pb_msgs.msg import Eps
+# from pb_msgs.msg import CheckResponseSignal
 
 APOLLO_CHASSIS_TOPIC = '/apollo/canbus/chassis'
-APOLLO_CHASSIS_DETAIL_TOPIC = '/apollo/canbus/chassis_detail'
+# APOLLO_CHASSIS_DETAIL_TOPIC = '/apollo/canbus/chassis_detail'
 
 def setup():
     pub = rospy.Publisher(APOLLO_CHASSIS_TOPIC, Chassis, queue_size=10)

@@ -94,6 +94,10 @@ def forward_gps(data, pubs):
 
     pub_corrected_imu.publish(msg_corrected_imu)
     pub_gps.publish(msg_gps)
+
+    chassis[1].speed_mps = (float(arr[0])**2 + float(arr[1])**2 + float(arr[2])**2)**0.5
+    chassis[1].gear_location = 1
+
     chassis[0].publish(chassis[1])
 
 def setup():
