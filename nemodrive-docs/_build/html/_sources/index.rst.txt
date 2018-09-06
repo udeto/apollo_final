@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to apollo-carla-bridge's documentation!
-===============================================
+Welcome to Nemodrive's Apollo fork Documentation
+================================================
 
 .. toctree::
     :maxdepth: 2
@@ -16,8 +16,9 @@ Welcome to apollo-carla-bridge's documentation!
     :maxdepth: 2
     :caption: Contents:
 
-    Installation <installation>
-    Config and run <config_run>
+    Carla-Apollo-Bridge <carla_apollo_bridge>
+        Installation <installation>
+        Config and run <config_run>
 
 Indices and tables
 ==================
