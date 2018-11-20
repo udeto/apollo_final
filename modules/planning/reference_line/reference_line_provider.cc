@@ -33,8 +33,8 @@
 #include "modules/common/vehicle_state/vehicle_state_provider.h"
 #include "modules/map/hdmap/hdmap_util.h"
 #include "modules/map/pnc_map/path.h"
+#include "modules/planning/common/planning_context.h"
 #include "modules/planning/common/planning_gflags.h"
-#include "modules/planning/common/planning_util.h"
 #include "modules/routing/common/routing_gflags.h"
 
 /**
@@ -73,6 +73,8 @@ ReferenceLineProvider::ReferenceLineProvider(const hdmap::HDMap *base_map) {
     smoother_.reset(new QpSplineReferenceLineSmoother(smoother_config_));
   } else if (smoother_config_.has_spiral()) {
     smoother_.reset(new SpiralReferenceLineSmoother(smoother_config_));
+  } else if (smoother_config_.has_cos_theta()) {
+    smoother_.reset(new CosThetaReferenceLineSmoother(smoother_config_));
   } else {
     CHECK(false) << "unknown smoother config "
                  << smoother_config_.DebugString();
@@ -172,9 +174,9 @@ void ReferenceLineProvider::UpdateReferenceLine(
 }
 
 void ReferenceLineProvider::GenerateThread() {
-  constexpr int32_t kSleepTime = 50;  // milliseconds
   while (!is_stop_) {
     std::this_thread::yield();
+    constexpr int32_t kSleepTime = 50;  // milliseconds
     std::this_thread::sleep_for(
         std::chrono::duration<double, std::milli>(kSleepTime));
     double start_time = Clock::NowInSeconds();
@@ -268,10 +270,10 @@ void ReferenceLineProvider::PrioritzeChangeLane(
 
 bool ReferenceLineProvider::GetReferenceLinesFromRelativeMap(
     const relative_map::MapMsg &relative_map,
-    std::list<ReferenceLine> *reference_line,
+    std::list<ReferenceLine> *reference_lines,
     std::list<hdmap::RouteSegments> *segments) {
   DCHECK_GE(relative_map.navigation_path_size(), 0);
-  DCHECK_NOTNULL(reference_line);
+  DCHECK_NOTNULL(reference_lines);
   DCHECK_NOTNULL(segments);
 
   if (relative_map.navigation_path().empty()) {
@@ -430,7 +432,8 @@ bool ReferenceLineProvider::GetReferenceLinesFromRelativeMap(
                        LaneWaypoint(lane_ptr, path_point.s())},
           path_point.kappa(), path_point.dkappa());
     }
-    reference_line->emplace_back(ref_points.begin(), ref_points.end());
+    reference_lines->emplace_back(ref_points.begin(), ref_points.end());
+    reference_lines->back().SetPriority(path_pair.second.path_priority());
   }
   return !segments->empty();
 }
@@ -788,7 +791,8 @@ void ReferenceLineProvider::GetAnchorPoints(
   common::util::uniform_slice(0.0, reference_line.Length(), num_of_anchors - 1,
                               &anchor_s);
   for (const double s : anchor_s) {
-    anchor_points->emplace_back(GetAnchorPoint(reference_line, s));
+    AnchorPoint anchor = GetAnchorPoint(reference_line, s);
+    anchor_points->emplace_back(anchor);
   }
   anchor_points->front().longitudinal_bound = 1e-6;
   anchor_points->front().lateral_bound = 1e-6;

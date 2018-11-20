@@ -20,9 +20,6 @@ DEFINE_string(perception_adapter_config_filename,
               "modules/perception/conf/adapter.conf",
               "The adapter config filename");
 
-DEFINE_string(work_root, "/apollo/modules/perception/",
-              "perception work root direcotry.");
-
 /// obstacle/base/object.cc
 DEFINE_bool(is_serialize_point_cloud, false,
             "serialize and output object cloud");
@@ -47,13 +44,16 @@ DEFINE_int32(localization_buffer_size, 40, "localization buffer size");
 DEFINE_string(lidar_tf2_frame_id, "novatel", "the tf2 transform frame id");
 DEFINE_string(lidar_tf2_child_frame_id, "velodyne64",
               "the tf2 transform child frame id");
+DEFINE_string(camera_tf2_frame_id, "velodyne64", "the tf2 transform frame id");
+DEFINE_string(camera_tf2_child_frame_id, "camera",
+              "the tf2 transform child frame id");
 DEFINE_string(obstacle_module_name, "perception_obstacle",
               "perception obstacle module name");
 DEFINE_bool(enable_visualization, false, "enable visualization for debug");
 
 /// obstacle/perception.cc
 /* dag streaming config for Apollo 2.0 */
-DEFINE_string(dag_config_path, "./conf/dag_streaming.config",
+DEFINE_string(dag_config_path, "modules/perception/conf/dag_streaming.config",
               "Onboard DAG Streaming config.");
 
 /// obstacle/onboard/radar_process_subnode.cc
@@ -153,8 +153,7 @@ DEFINE_string(
     yolo_camera_detector_config,
     "modules/perception/model/camera/yolo_camera_detector_config.pb.txt",
     "Yolo camera detector config filename.");
-DEFINE_bool(use_whole_lane_line, false,
-            "Use whole lane line model or not");
+DEFINE_bool(use_whole_lane_line, false, "Use whole lane line model or not");
 DEFINE_string(modest_radar_detector_config,
               "modules/perception/model/modest_radar_detector_config.pb.txt",
               "modest radar detector config filename.");
@@ -203,3 +202,11 @@ DEFINE_string(traffic_light_subnode_config,
               "modules/perception/model/traffic_light/"
               "subnode_config.pb.txt",
               "traffic light subnode config filename.");
+DEFINE_double(light_height_adjust, 0, " adjust height without chaning code");
+
+DEFINE_string(traffic_light_rectifier, "",
+              "the rectifier enabled for traffic_light");
+DEFINE_string(traffic_light_recognizer, "",
+              "the recognizer enabled for traffic_light");
+DEFINE_string(traffic_light_reviser, "",
+              "the reviser enabled for traffic_light");

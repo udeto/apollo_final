@@ -28,6 +28,10 @@ DEFINE_int32(planning_loop_rate, 10, "Loop rate for planning node");
 DEFINE_bool(enable_collision_detection, false,
             "enable collision detection in planning");
 
+DEFINE_string(lane_follow_scenario_config_file,
+              "modules/planning/conf/lane_follow_scenario_config.pb.txt",
+              "The lane follow scenario configuration file");
+
 DEFINE_string(planning_adapter_config_filename,
               "modules/planning/conf/adapter.conf",
               "The adapter configuration file");
@@ -38,7 +42,11 @@ DEFINE_string(traffic_rule_config_filename,
 
 DEFINE_string(smoother_config_filename,
               "modules/planning/conf/qp_spline_smoother_config.pb.txt",
-              "The configuration file for spiral smoother");
+              "The configuration file for qp_spline smoother");
+
+DEFINE_string(reopt_smoother_config_filename,
+              "modules/planning/conf/qp_spline_smoother_config.pb.txt",
+              "The configuration file for qp_spline smoother");
 
 DEFINE_string(rtk_trajectory_filename, "modules/planning/data/garage.csv",
               "Loop rate for planning node");
@@ -236,7 +244,6 @@ DEFINE_int32(trajectory_point_num_for_debug, 10,
 
 DEFINE_bool(enable_record_debug, true,
             "True to enable record debug into debug protobuf.");
-DEFINE_bool(enable_prediction, true, "True to enable prediction input.");
 
 DEFINE_bool(enable_lag_prediction, true,
             "Enable lagged prediction, which is more tolerant to obstacles "
@@ -263,7 +270,7 @@ DEFINE_bool(enable_follow_accel_constraint, true,
 DEFINE_bool(enable_sqp_solver, true, "True to enable SQP solver.");
 
 /// thread pool
-DEFINE_uint32(max_planning_thread_pool_size, 5,
+DEFINE_uint32(max_planning_thread_pool_size, 15,
               "num of thread used in planning thread pool.");
 DEFINE_bool(use_multi_thread_to_add_obstacles, false,
             "use multiple thread to add obstacles.");
@@ -358,7 +365,18 @@ DEFINE_double(nudge_buffer, 0.3, "buffer to nudge for lateral optimization");
 
 DEFINE_bool(use_planning_fallback, true,
             "Use fallback trajectory for planning.");
+DEFINE_double(fallback_total_time, 3.0, "total fallback trajectory time");
+DEFINE_double(fallback_time_unit, 0.02,
+              "fallback trajectory unit time in seconds");
+DEFINE_double(polynomial_speed_fallback_velocity, 3.5,
+              "velocity to use polynomial speed fallback.");
 
 // navigation mode
 DEFINE_double(navigation_fallback_cruise_time, 8.0,
               "The time range of fallback cruise under navigation mode.");
+
+DEFINE_bool(enable_stitch_last_trajectory, true,
+            "To control whether to stitch last trajectory or not.");
+
+DEFINE_bool(enable_planning_pad_msg, false,
+            "To control whether to enable planning pad message.");
