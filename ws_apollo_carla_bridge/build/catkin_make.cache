@@ -1,0 +1,2 @@
+apollo_carla_bridge
+-DCATKIN_DEVEL_PREFIX=/apollo/ws_apollo_carla_bridge/devel -DCMAKE_INSTALL_PREFIX=/apollo/ws_apollo_carla_bridge/install -G Unix Makefiles

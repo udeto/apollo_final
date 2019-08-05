@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /apollo/ws_apollo_carla_bridge/devel/setup.sh

@@ -1,0 +1,53 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2573912321/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2573912321.dir/build.make CMakeFiles/cmTryCompileExec2573912321.dir/build
+make[1]: Entering directory `/apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2573912321.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec2573912321.dir/CheckSymbolExists.c.o   -c /apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec2573912321
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2573912321.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec2573912321.dir/CheckSymbolExists.c.o  -o cmTryCompileExec2573912321 -rdynamic 
+CMakeFiles/cmTryCompileExec2573912321.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[1]: Leaving directory `/apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTryCompileExec2573912321] Error 1
+make: *** [cmTryCompileExec2573912321/fast] Error 2
+
+File /apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec985139078/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec985139078.dir/build.make CMakeFiles/cmTryCompileExec985139078.dir/build
+make[1]: Entering directory `/apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec985139078.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec985139078.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec985139078
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec985139078.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec985139078.dir/CheckFunctionExists.c.o  -o cmTryCompileExec985139078 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: Leaving directory `/apollo/ws_apollo_carla_bridge/build/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTryCompileExec985139078] Error 1
+make: *** [cmTryCompileExec985139078/fast] Error 2
+
+

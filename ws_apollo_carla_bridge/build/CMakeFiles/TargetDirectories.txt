@@ -1,0 +1,8 @@
+/apollo/ws_apollo_carla_bridge/build/apollo_carla_bridge/CMakeFiles/_catkin_empty_exported_target.dir
+/apollo/ws_apollo_carla_bridge/build/CMakeFiles/clean_test_results.dir
+/apollo/ws_apollo_carla_bridge/build/CMakeFiles/download_extra_data.dir
+/apollo/ws_apollo_carla_bridge/build/CMakeFiles/doxygen.dir
+/apollo/ws_apollo_carla_bridge/build/gtest/CMakeFiles/gtest.dir
+/apollo/ws_apollo_carla_bridge/build/gtest/CMakeFiles/gtest_main.dir
+/apollo/ws_apollo_carla_bridge/build/CMakeFiles/run_tests.dir
+/apollo/ws_apollo_carla_bridge/build/CMakeFiles/tests.dir

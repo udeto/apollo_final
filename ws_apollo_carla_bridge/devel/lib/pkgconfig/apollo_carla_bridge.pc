@@ -1,0 +1,8 @@
+prefix=/apollo/ws_apollo_carla_bridge/devel
+
+Name: apollo_carla_bridge
+Description: Description of apollo_carla_bridge
+Version: 0.0.0
+Cflags: 
+Libs: -L/apollo/ws_apollo_carla_bridge/devel/lib 
+Requires: 
