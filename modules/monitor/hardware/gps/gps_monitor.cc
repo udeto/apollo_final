@@ -53,7 +53,7 @@ void GpsMonitor::RunOnce(const double current_time) {
   // Check Gnss status.
   auto *gnss_status_adapter = AdapterManager::GetGnssStatus();
   gnss_status_adapter->Observe();
-  if (gnss_status_adapter->Empty()) {
+    if (gnss_status_adapter->Empty()) {
     status->set_status(HardwareStatus::ERR);
     status->set_detailed_msg("No GNSS status message.");
     return;

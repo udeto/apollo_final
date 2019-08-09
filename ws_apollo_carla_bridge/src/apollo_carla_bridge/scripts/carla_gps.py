@@ -6,6 +6,9 @@ from modules.localization.proto.gps_pb2 import Gps
 from modules.localization.proto.pose_pb2 import Pose
 from pb_msgs.msg import Quaternion
 from pb_msgs.msg import Chassis
+from pb_msgs.msg import GnssStatus
+from pb_msgs.msg import InsStatus
+from pb_msgs.msg import GnssBestPose
 from std_msgs.msg import String
 
 from math import radians
@@ -18,13 +21,19 @@ import chassis_faker
 
 APOLLO_GPS_TOPIC = '/apollo/sensor/gnss/odometry'
 APOLLO_CORRECTED_IMU_TOPIC = '/apollo/sensor/gnss/corrected_imu'
+APOLLO_GPS_STATUS_TOPIC = '/apollo/sensor/gnss/gnss_status'
+APOLLO_INS_STATUS_TOPIC = '/apollo/sensor/gnss/ins_status'
+APOLLO_GPS_BESTPOSE_TOPIC = '/apollo/sensor/gnss/best_pose'
 
 CARLA_PLAYER_VEHICLE_TOPIC = '/player_vehicle'
 
 def forward_gps(data, pubs):
     pub_gps = pubs[0]
     pub_corrected_imu = pubs[1]
-    chassis = pubs[2]
+    pub_gps_status = pubs[2]
+    pub_ins_status = pubs[3]
+    pub_gps_bestpose = pubs[4]
+    chassis = pubs[5]
 
     ''' 
         [0] location.x
@@ -96,6 +105,18 @@ def forward_gps(data, pubs):
     pub_corrected_imu.publish(msg_corrected_imu)
     pub_gps.publish(msg_gps)
 
+    gnss_stat = GnssStatus()
+    gnss_stat.solution_completed = True
+    pub_gps_status.publish(gnss_stat)
+
+    ins_stat = InsStatus()
+    ins_stat.type = 2
+    pub_ins_status.publish(ins_stat)
+
+    gnss_bestpose = GnssBestPose()
+    gnss_bestpose.measurement_time = 3
+    pub_gps_bestpose.publish(gnss_bestpose)
+
     chassis[1].speed_mps = float(arr[15])
     chassis[1].gear_location = 1
 
@@ -104,7 +125,10 @@ def forward_gps(data, pubs):
 def setup():
     pub_gps = rospy.Publisher(APOLLO_GPS_TOPIC, Gps, queue_size=10)
     pub_corrected_imu = rospy.Publisher(APOLLO_CORRECTED_IMU_TOPIC, CorrectedImu, queue_size=10)
-    rospy.Subscriber(CARLA_PLAYER_VEHICLE_TOPIC, String, forward_gps, [pub_gps, pub_corrected_imu, chassis_faker.setup()], queue_size=10)
+    pub_gps_status = rospy.Publisher(APOLLO_GPS_STATUS_TOPIC, GnssStatus, queue_size=10)
+    pub_ins_status = rospy.Publisher(APOLLO_INS_STATUS_TOPIC, InsStatus, queue_size=10)
+    pub_gps_bestpose = rospy.Publisher(APOLLO_GPS_BESTPOSE_TOPIC, GnssBestPose, queue_size=10)
+    rospy.Subscriber(CARLA_PLAYER_VEHICLE_TOPIC, String, forward_gps, [pub_gps, pub_corrected_imu, pub_gps_status, pub_ins_status, pub_gps_bestpose, chassis_faker.setup()], queue_size=10)
 
 def main():
     rospy.init_node('gps_faker')
