@@ -150,3 +150,27 @@
 --use_navigation_mode=1
 
 --use_navigation_mode=0
+
+--use_navigation_mode=1
+
+--use_navigation_mode=0
+
+--use_navigation_mode=1
+
+--use_navigation_mode=0
+
+--use_navigation_mode=1
+
+--use_navigation_mode=0
+
+--use_navigation_mode=1
+
+--use_navigation_mode=0
+
+--use_navigation_mode=1
+
+--use_navigation_mode=0
+
+--use_navigation_mode=1
+
+--use_navigation_mode=0

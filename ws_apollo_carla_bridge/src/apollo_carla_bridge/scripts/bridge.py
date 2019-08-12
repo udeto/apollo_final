@@ -6,6 +6,7 @@ from sensor_msgs.msg import Image
 from sensor_msgs.msg import PointCloud2
 
 import carla_gps
+import chassis_faker
 import control_transform
 
 CARLA_LIDAR_TOPIC = '/lidar_0'
@@ -24,7 +25,7 @@ def main():
     rospy.init_node('carla_to_apollo_data')
 
     carla_gps.setup()
-
+    
     pub_lidar = rospy.Publisher(APOLLO_LIDAR_TOPIC, PointCloud2, queue_size=10)
     rospy.Subscriber(CARLA_LIDAR_TOPIC, PointCloud2, forward_callback, pub_lidar, queue_size=10)
 
@@ -38,7 +39,7 @@ def main():
     rospy.Subscriber(CARLA_CAMERA_SHORT_TOPIC, Image, forward_callback, pub_cam_short, queue_size=10)
 
     control_transform.setup()
-
+    chassis_faker.main()
     rospy.spin()
 
 if __name__ == '__main__':
