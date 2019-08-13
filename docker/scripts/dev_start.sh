@@ -262,7 +262,7 @@ function main(){
     if ! [ -x "$(command -v ${DOCKER_CMD})" ]; then
         DOCKER_CMD="docker"
     fi
-
+    echo ${DOCKER_CMD}
     EXTRA_VOLUMES=""
     if [ "$ARCH" == 'aarch64' ]; then
         EXTRA_VOLUMES="
@@ -274,7 +274,6 @@ function main(){
         -v /lib/firmware/tegra18x:/lib/firmware/tegra18x
         "
     fi
-
 
     ${DOCKER_CMD} run -it \
         -d \
