@@ -55,10 +55,11 @@ def forward_gps(data, pubs):
     '''
     arr = data.data.split()
 
-    pitch = radians(float(arr[3]))
-    roll = radians(float(arr[4]))
+    pitch = float(arr[3])
+    roll = float(arr[4])
     yaw = float(arr[5])
-    yaw = radians((360-yaw if yaw>0 else -yaw) - 90)
+    yaw = yaw - radians(90)
+    #yaw = radians((360-yaw if yaw>0 else -yaw) - 90)
 
     p = Pose()
     # needed for localization
