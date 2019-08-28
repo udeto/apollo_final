@@ -13,14 +13,6 @@
 
 --map_dir=/apollo/modules/map/data/sunnyvale_big_loop
 
---map_dir=/apollo/modules/map/data/carla
-
---use_navigation_mode=1
-
---map_dir=/apollo/modules/map/data/demo
-
---map_dir=/apollo/modules/map/data/sunnyvale_big_loop
-
 --map_dir=/apollo/modules/map/data/sunnyvale_loop
 
 --map_dir=/apollo/modules/map/data/Town02
@@ -35,63 +27,6 @@
 
 --use_navigation_mode=0
 
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---map_dir=/apollo/modules/map/data/Town02
-
---map_dir=/apollo/modules/map/data/sunnyvale_loop
-
---map_dir=/apollo/modules/map/data/UPB
-
---map_dir=/apollo/modules/map/data/carla
-
---map_dir=/apollo/modules/map/data/demo
-
---map_dir=/apollo/modules/map/data/Town02
-
---map_dir=/apollo/modules/map/data/carla
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---map_dir=/apollo/modules/map/data/Town02
-
---map_dir=/apollo/modules/map/data/carla
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
 
 --map_dir=/apollo/modules/map/data/Town02
 
@@ -99,9 +34,9 @@
 
 --map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
 --map_dir=/apollo/modules/map/data/carla
 
@@ -115,73 +50,41 @@
 
 --map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
 --map_dir=/apollo/modules/map/data/carla
 
 --map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
 --map_dir=/apollo/modules/map/data/carla
 
 --map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
-
---use_navigation_mode=1
-
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
 --map_dir=/apollo/modules/map/data/carla
 
@@ -195,20 +98,64 @@
 
 --map_dir=/apollo/modules/map/data/carla
 
---map_dir=/apollo/modules/map/data/demo
+--map_dir=/apollo/modules/map/data/Town02
 
---map_dir=/apollo/modules/map/data/sunnyvale_big_loop
+--map_dir=/apollo/modules/map/data/carla
 
 --map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
 
---use_navigation_mode=1
+--map_dir=/apollo/modules/map/data/carla
 
---use_navigation_mode=0
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02
+
+--map_dir=/apollo/modules/map/data/carla
+
+--map_dir=/apollo/modules/map/data/Town02

@@ -8,6 +8,7 @@ from sensor_msgs.msg import PointCloud2
 import carla_gps
 import chassis_faker
 import control_transform
+import carla_waypoints
 
 CARLA_LIDAR_TOPIC = '/lidar_0'
 CARLA_CAMERA_LONG_TOPIC = '/camera_long/image_raw'
@@ -39,7 +40,8 @@ def main():
     rospy.Subscriber(CARLA_CAMERA_SHORT_TOPIC, Image, forward_callback, pub_cam_short, queue_size=10)
 
     control_transform.setup()
-    chassis_faker.main()
+    chassis_faker.setup()
+    carla_waypoints.setup()
     rospy.spin()
 
 if __name__ == '__main__':

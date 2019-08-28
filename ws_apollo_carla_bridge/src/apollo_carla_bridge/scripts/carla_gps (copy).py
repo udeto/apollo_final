@@ -27,24 +27,6 @@ APOLLO_GPS_BESTPOSE_TOPIC = '/apollo/sensor/gnss/best_pose'
 
 CARLA_PLAYER_VEHICLE_TOPIC = '/player_vehicle'
 
-def euler_from_quarterion(x, y, z, w):
-
-        import math
-        t0 = +2.0 * (w * x + y * z)
-        t1 = +1.0 - 2.0 * (x * x + y * y)
-        X = math.degrees(math.atan2(t0, t1))
-
-        t2 = +2.0 * (w * y - z * x)
-        t2 = +1.0 if t2 > +1.0 else t2
-        t2 = -1.0 if t2 < -1.0 else t2
-        Y = math.degrees(math.asin(t2))
-
-        t3 = +2.0 * (w * z + x * y)
-        t4 = +1.0 - 2.0 * (y * y + z * z)
-        Z = math.degrees(math.atan2(t3, t4))
-
-        return X, Y, Z
-
 def forward_gps(data, pubs):
     pub_gps = pubs[0]
     pub_corrected_imu = pubs[1]
@@ -57,35 +39,31 @@ def forward_gps(data, pubs):
         [0] location.x
         [1] location.y
         [2] location.z
-        [3] rotation.roll
-        [4] rotation.pitch
+        [3] rotation.pitch
+        [4] rotation.roll
         [5] rotation.yaw
-        [6] rotation.w
-        [7] angular_velocity.x
-        [8] angular_velocity.y
-        [9] angular_velocity.z
-        [10] linear_velocity.x
-        [11] linear_velocity.y
-        [12] linear_velocity.z
-        [13] acceleration.x
-        [14] acceleration.y
-        [15] acceleration.z
-        [16] forward_speed
+        [6] angular_velocity.x
+        [7] angular_velocity.y
+        [8] angular_velocity.z
+        [9] linear_velocity.x
+        [10] linear_velocity.y
+        [11] linear_velocity.z
+        [12] acceleration.x
+        [13] acceleration.y
+        [14] acceleration.z
+        [15] forward_speed
     '''
     arr = data.data.split()
 
-    qx = float(arr[3])
-    qy = float(arr[4])
-    qz = float(arr[5])
-    qw = float(arr[6])
+    pitch = float(arr[3])
+    roll = float(arr[4])
+    yaw = float(arr[5])
+    yaw = yaw - radians(90)
 
-    #calculating euler angles form quarterion to subtract 90 degree from yaw 
-    # -> heading in apollo is 0 when facing east while heading in carla is 0 when facing north
-    roll, pitch, yaw = euler_from_quarterion(qx, qy, qz, qw)
-    yaw = yaw - 90
-    qq = tf.transformations.quaternion_from_euler(radians(roll), radians(pitch), radians(yaw))
+
     p = Pose()
     # needed for localization
+    qq = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
     q = Quaternion()
     q.qx = qq[0]
     q.qy = qq[1]
@@ -101,23 +79,23 @@ def forward_gps(data, pubs):
     p.orientation.qw = q.qw
 
     # needed for routing
-    p.angular_velocity_vrf.x = float(arr[7])
-    p.angular_velocity_vrf.y = float(arr[8])
-    p.angular_velocity_vrf.z = float(arr[9])
-    p.angular_velocity.x = float(arr[7])
-    p.angular_velocity.y = float(arr[8])
-    p.angular_velocity.z = float(arr[9])
-    p.linear_acceleration.x = float(arr[13])
-    p.linear_acceleration.y = float(arr[14])
-    p.linear_acceleration.z = float(arr[15])
-    p.linear_acceleration_vrf.x = float(arr[13])
-    p.linear_acceleration_vrf.y = float(arr[14])
-    p.linear_acceleration_vrf.z = float(arr[15])
+    p.angular_velocity_vrf.x = float(arr[6])
+    p.angular_velocity_vrf.y = float(arr[7])
+    p.angular_velocity_vrf.z = float(arr[8])
+    p.angular_velocity.x = float(arr[6])
+    p.angular_velocity.y = float(arr[7])
+    p.angular_velocity.z = float(arr[8])
+    p.linear_acceleration.x = float(arr[12])
+    p.linear_acceleration.y = float(arr[13])
+    p.linear_acceleration.z = float(arr[14])
+    p.linear_acceleration_vrf.x = float(arr[12])
+    p.linear_acceleration_vrf.y = float(arr[13])
+    p.linear_acceleration_vrf.z = float(arr[14])
 
     # needed for prediction
-    p.linear_velocity.x = float(arr[10])
-    p.linear_velocity.y = float(arr[11])
-    p.linear_velocity.z = float(arr[12])
+    p.linear_velocity.x = float(arr[9])
+    p.linear_velocity.y = float(arr[10])
+    p.linear_velocity.z = float(arr[11])
 
     msg_gps = Gps()
     msg_gps.localization.CopyFrom(p)
@@ -140,7 +118,7 @@ def forward_gps(data, pubs):
     gnss_bestpose.measurement_time = 3
     pub_gps_bestpose.publish(gnss_bestpose)
 
-    chassis[1].speed_mps = float(arr[16])
+    chassis[1].speed_mps = float(arr[15])
     chassis[1].gear_location = 1
 
     chassis[0].publish(chassis[1])

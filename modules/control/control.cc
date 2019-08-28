@@ -45,11 +45,9 @@ std::string Control::Name() const { return FLAGS_control_node_name; }
 
 Status Control::Init() {
   init_time_ = Clock::NowInSeconds();
-
-  AINFO << "Control init, starting ...";
+  AINFO << "Control init, starting control...";
   CHECK(common::util::GetProtoFromFile(FLAGS_control_conf_file, &control_conf_))
       << "Unable to load control conf file: " + FLAGS_control_conf_file;
-
   AINFO << "Conf file: " << FLAGS_control_conf_file << " is loaded.";
 
   AdapterManager::Init(FLAGS_control_adapter_config_filename);
@@ -86,6 +84,7 @@ Status Control::Init() {
 }
 
 Status Control::Start() {
+  AINFO << "--> Start Start()";
   // set initial vehicle state by cmd
   // need to sleep, because advertised channel is not ready immediately
   // simple test shows a short delay of 80 ms or so
@@ -106,13 +105,15 @@ Status Control::Start() {
 
   common::monitor::MonitorLogBuffer buffer(&monitor_logger_);
   buffer.INFO("control started");
-
+  AINFO << "<-- End Start()";
   return Status::OK();
 }
 
 void Control::OnPad(const PadMessage &pad) {
+  AINFO << "--> Start OnPad()";
   pad_msg_ = pad;
   ADEBUG << "Received Pad Msg:" << pad.DebugString();
+  AINFO << "Received Pad Msg:" << pad.DebugString();
   AERROR_IF(!pad_msg_.has_action()) << "pad message check failed!";
 
   // do something according to pad message
@@ -121,20 +122,25 @@ void Control::OnPad(const PadMessage &pad) {
     estop_ = false;
     estop_reason_.clear();
   }
+  AINFO << "<-- End OnPad()";
   pad_received_ = true;
 }
 
 void Control::OnMonitor(
-    const common::monitor::MonitorMessage &monitor_message) {
+      const common::monitor::MonitorMessage &monitor_message) {
+  AINFO << "--> Start OnMonitor()";
   for (const auto &item : monitor_message.item()) {
     if (item.log_level() == MonitorMessageItem::FATAL) {
       estop_ = true;
+      AINFO << "estop = true";
       return;
     }
   }
+  AINFO << "<-- End OnMonitor()";
 }
 
 Status Control::ProduceControlCommand(ControlCommand *control_command) {
+  AINFO << "--> Start ProduceControlCommand()";
   Status status = CheckInput();
   // check data
 
@@ -146,6 +152,7 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
     control_command->mutable_engage_advice()->set_reason(
         status.error_message());
     estop_ = true;
+    AINFO << "estop = true";
     estop_reason_ = status.error_message();
   } else {
     Status status_ts = CheckTimestamp();
@@ -164,9 +171,11 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
       control_command->mutable_engage_advice()->set_advice(
           apollo::common::EngageAdvice::READY_TO_ENGAGE);
     }
+    AINFO << "<-- End ProcuceControlCommand()";
   }
 
   // check estop
+  AINFO << "Check estop";
   estop_ = FLAGS_enable_persistent_estop ?
     estop_ || trajectory_.estop().is_estop() : trajectory_.estop().is_estop();
 
@@ -176,6 +185,7 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
 
   // if planning set estop, then no control process triggered
   if (!estop_) {
+    AINFO << "planning set estop -> no control";
     if (chassis_.driving_mode() == Chassis::COMPLETE_MANUAL) {
       controller_agent_.Reset();
       AINFO_EVERY(100) << "Reset Controllers in Manual Mode";
@@ -211,7 +221,9 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
     control_command->set_gear_location(Chassis::GEAR_DRIVE);
   }
   // check signal
+  AINFO << "check signal";
   if (trajectory_.decision().has_vehicle_signal()) {
+    AINFO << "Signal true";
     control_command->mutable_signal()->CopyFrom(
         trajectory_.decision().vehicle_signal());
   }
@@ -219,8 +231,8 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
 }
 
 void Control::OnTimer(const ros::TimerEvent &) {
+  AINFO << "--> Start OnTimer()";
   double start_timestamp = Clock::NowInSeconds();
-
   if (FLAGS_is_control_test_mode && FLAGS_control_test_duration > 0 &&
       (start_timestamp - init_time_) > FLAGS_control_test_duration) {
     AERROR << "Control finished testing. exit";
@@ -276,6 +288,7 @@ Status Control::CheckInput() {
   auto trajectory_adapter = AdapterManager::GetPlanning();
   if (trajectory_adapter->Empty()) {
     AWARN_EVERY(100) << "No planning msg yet. ";
+    AINFO << "No planning msg yet.";
     return Status(ErrorCode::CONTROL_COMPUTE_ERROR, "No planning msg");
   }
   trajectory_ = trajectory_adapter->GetLatestObserved();
@@ -339,6 +352,8 @@ Status Control::CheckTimestamp() {
 }
 
 void Control::SendCmd(ControlCommand *control_command) {
+  std::cout << control_command->ShortDebugString();
+  AINFO << control_command->ShortDebugString();
   // set header
   if (AdapterManager::GetPlanning() &&
       !AdapterManager::GetPlanning()->Empty()) {
