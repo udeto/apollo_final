@@ -27,14 +27,14 @@ def main():
     msg1.engine_started = True
     msg1.driving_mode = 1
 
-    """     
+         
     pub2 = rospy.Publisher(APOLLO_CONTROL_PAD_TOPIC, PadMessage, queue_size=10)
     msg2 = PadMessage()
     msg2.action = 1
     msg2.driving_mode = 1 
-    """
     
-    """ 
+    
+    """     
     pub3 = rospy.Publisher(APOLLO_CHASSIS_DETAIL_TOPIC, ChassisDetail, queue_size=10)
     msg3 = ChassisDetail()
     e = Eps()
@@ -46,13 +46,13 @@ def main():
     crs.is_eps_online = True
 
     msg3.check_response.CopyFrom(crs) 
-    
+    """    
 
     while not rospy.is_shutdown():
         pub1.publish(msg1)
         pub2.publish(msg2)
-        pub3.publish(msg3)
-    """
+        #pub3.publish(msg3)
+    
 
 if __name__ == '__main__':
         main() 

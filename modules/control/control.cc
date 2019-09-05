@@ -152,8 +152,10 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
     control_command->mutable_engage_advice()->set_reason(
         status.error_message());
     estop_ = true;
-    AINFO << "estop = true";
     estop_reason_ = status.error_message();
+    AINFO << "estop:";
+    AINFO << estop_;
+    AINFO << estop_reason_;
   } else {
     Status status_ts = CheckTimestamp();
     if (!status_ts.ok()) {
@@ -171,7 +173,7 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
       control_command->mutable_engage_advice()->set_advice(
           apollo::common::EngageAdvice::READY_TO_ENGAGE);
     }
-    AINFO << "<-- End ProcuceControlCommand()";
+    
   }
 
   // check estop
@@ -199,6 +201,9 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
     Status status_compute = controller_agent_.ComputeControlCommand(
         &localization_, &chassis_, &trajectory_, control_command);
 
+    AINFO << "Status conpute:";
+    AINFO << status_compute.ok();
+    
     if (!status_compute.ok()) {
       AERROR << "Control main function failed"
              << " with localization: " << localization_.ShortDebugString()
@@ -215,6 +220,7 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
   if (estop_) {
     AWARN_EVERY(100) << "Estop triggered! No control core method executed!";
     // set Estop command
+    AINFO << "Estop triggert -> set estop brake command";
     control_command->set_speed(0);
     control_command->set_throttle(0);
     control_command->set_brake(control_conf_.soft_estop_brake());
@@ -227,6 +233,7 @@ Status Control::ProduceControlCommand(ControlCommand *control_command) {
     control_command->mutable_signal()->CopyFrom(
         trajectory_.decision().vehicle_signal());
   }
+  AINFO << "<-- End ProcuceControlCommand()";
   return status;
 }
 
@@ -286,12 +293,16 @@ Status Control::CheckInput() {
   ADEBUG << "Received chassis:" << chassis_.ShortDebugString();
 
   auto trajectory_adapter = AdapterManager::GetPlanning();
+  AINFO << "Trajectory adapter: ";
+  AINFO << trajectory_adapter;
   if (trajectory_adapter->Empty()) {
     AWARN_EVERY(100) << "No planning msg yet. ";
     AINFO << "No planning msg yet.";
     return Status(ErrorCode::CONTROL_COMPUTE_ERROR, "No planning msg");
   }
   trajectory_ = trajectory_adapter->GetLatestObserved();
+  AINFO << "trajectory point size: ";
+  AINFO << trajectory_.trajectory_point_size();
   if (!trajectory_.estop().is_estop() &&
       trajectory_.trajectory_point_size() == 0) {
     AWARN_EVERY(100) << "planning has no trajectory point. ";

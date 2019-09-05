@@ -9,6 +9,7 @@ import carla_gps
 import chassis_faker
 import control_transform
 import carla_waypoints
+import pad_faker
 
 CARLA_LIDAR_TOPIC = '/lidar_0'
 CARLA_CAMERA_LONG_TOPIC = '/camera_long/image_raw'
@@ -41,7 +42,8 @@ def main():
 
     control_transform.setup()
     chassis_faker.setup()
-    carla_waypoints.setup()
+    carla_waypoints.main()
+    pad_faker.main()
     rospy.spin()
 
 if __name__ == '__main__':

@@ -282,6 +282,8 @@ function main(){
         ${MAP_VOLUME_CONF} \
         --volumes-from ${LOCALIZATION_VOLUME} \
         --volumes-from ${YOLO3D_VOLUME} \
+        -e ROS_MASTER_URI=http://172.17.0.1:11311 \
+        -e ROS_IP=172.17.0.1 \
         -e DISPLAY=$display \
         -e DOCKER_USER=$USER \
         -e USER=$USER \
@@ -289,7 +291,7 @@ function main(){
         -e DOCKER_GRP="$GRP" \
         -e DOCKER_GRP_ID=$GRP_ID \
         -e DOCKER_IMG=$IMG \
-	${EXTRA_VOLUMES} \
+    ${EXTRA_VOLUMES} \
         $(local_volumes) \
         --net host \
         -w /apollo \

@@ -1,0 +1,8 @@
+header:
+timestamp_sec: 1567609733.93
+module name: std_planning
+sequence num: 1038
+lidar time: 0
+camera time: 0
+radar time: 0
+status
