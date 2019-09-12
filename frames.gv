@@ -1,0 +1,3 @@
+digraph G {
+"novatel" -> "velodyne64"[label="Broadcaster: /test_tf_broadcaster\nAverage rate: 426620000.000 Hz\nMost recent transform: 0.000 \nBuffer length: 0.000 sec\n"];
+}

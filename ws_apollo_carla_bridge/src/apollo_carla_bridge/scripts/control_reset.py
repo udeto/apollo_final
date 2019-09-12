@@ -13,16 +13,17 @@ APOLLO_CONTROL_PAD_TOPIC = '/apollo/control/pad'
 
 
 def main():
-    #rospy.init_node("pad_faker")    
+    rospy.init_node("pad_faker")    
 
     pub2 = rospy.Publisher(APOLLO_CONTROL_PAD_TOPIC, PadMessage, queue_size=10)
     msg2 = PadMessage()
     msg2.action = 2
     msg2.driving_mode = 1 
     
-    rospy.sleep(2)
+    print("sleep")
+    #rospy.sleep(2)
 
-    for i in range(20):
+    while not rospy.is_shutdown():
         pub2.publish(msg2)
         print("--publish pad message--")
         print("driving action: ", msg2.action)

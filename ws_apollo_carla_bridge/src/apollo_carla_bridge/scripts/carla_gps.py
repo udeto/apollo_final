@@ -92,7 +92,8 @@ def forward_gps(data, pubs):
     q.qz = qq[2]
     q.qw = qq[3]
     p.position.x = float(arr[0])
-    p.position.y = float(arr[1]) + 182.5
+    #add 182.5 to y 
+    p.position.y = float(arr[1]) + 182.5 
     p.position.z = float(arr[2])
 
     p.orientation.qx = q.qx
