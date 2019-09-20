@@ -121,9 +121,11 @@ def forward_gps(data, pubs):
     p.linear_velocity.z = float(arr[12])
 
     msg_gps = Gps()
+    msg_gps.header.timestamp_sec = rospy.get_time()
     msg_gps.localization.CopyFrom(p)
 
     msg_corrected_imu = CorrectedImu()
+    msg_corrected_imu.header.timestamp_sec = rospy.get_time()
     msg_corrected_imu.imu.CopyFrom(p)
 
     pub_corrected_imu.publish(msg_corrected_imu)

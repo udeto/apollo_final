@@ -14,7 +14,7 @@ if __name__ == '__main__':
         #print(listener.allFramesAsString())
 
         print("Check listener can Transform")
-        print(listener.canTransform('/velodyne64', '/novatel', rospy.Time(0)))
+        print(listener.canTransform('/localization', '/world', rospy.Time(0)))
 
         #print("Check buffer can Transform")
         #print(buffer.canTransform('/velodyne64', '/novatel', 10, rospy.Time(0)))

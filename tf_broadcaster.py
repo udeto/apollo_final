@@ -78,11 +78,15 @@ def short_camera_to_long_camera():
 if __name__ == '__main__':
     rospy.init_node('test_tf_broadcaster')
 
+    rate=rospy.Rate(100) #100hz
+
     while not rospy.is_shutdown():
-        world_to_localization()
+        #world_to_localization()
         localization_to_novatel()
         novatel_to_velodyne64()
         velodyne64_to_short_camera()
         velodyne64_to_radar_front()
         short_camera_to_radar()
         short_camera_to_long_camera()
+
+        rate.sleep()

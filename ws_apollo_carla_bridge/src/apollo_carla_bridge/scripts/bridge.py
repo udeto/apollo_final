@@ -42,8 +42,7 @@ def main():
 
     control_transform.setup()
     chassis_faker.setup()
-    carla_waypoints.main()
-    pad_faker.main()
+    carla_waypoints.setup()
     rospy.spin()
 
 if __name__ == '__main__':

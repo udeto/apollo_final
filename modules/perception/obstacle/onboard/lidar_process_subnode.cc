@@ -148,7 +148,8 @@ void LidarProcessSubnode::OnPointCloud(
       pcl::copyPointCloud(*point_cloud, *roi_indices, *roi_cloud);
       roi_indices_ = roi_indices;
     } else {
-      AERROR << "failed to call roi filter.";
+      AERROR << "failed to call roi filter."
+             << " HDmap: " << roi_filter_options.hdmap;
       return;
     }
   }

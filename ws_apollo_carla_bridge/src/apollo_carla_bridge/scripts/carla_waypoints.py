@@ -2,6 +2,7 @@
 
 import rospy
 from pb_msgs.msg import RoutingRequest, LaneWaypoint, RoutingResponse
+from modules.control.proto.pad_msg_pb2 import PadMessage
 from nav_msgs.msg import Path
 from std_msgs.msg import String
 
@@ -24,20 +25,15 @@ def on_player_vehicle_input(data):
 def on_waypoint_input(data):
     global carla_route
     carla_route = data
+    send_request()
 
-def setup():
-    rospy.Subscriber(CALRA_WAYPOINTS_TOPIC, Path, on_waypoint_input)
-    rospy.Subscriber(CARLA_PLAYER_VEHICLE_TOPIC, String, on_player_vehicle_input)
 
-def main():
-    #rospy.init_node("carla_waypoints_to_apollo") 
-    setup()
-
+def send_request():
     route = RoutingRequest()
     i=1
-    
     #wait for position input
     ready = False
+    rospy.sleep(10)
     while not ready:
         try:
             ready = position_recieved
@@ -72,15 +68,38 @@ def main():
 
         #publish the waypoints to apollo
         pub_route = rospy.Publisher(APOLLO_WAYPOINTS_TOPIC, RoutingRequest, queue_size=10)
-        for i in range(2):    
+        for i in range(4):    
             pub_route.publish(route)
-            print("route published")
-            print("sleep 3 sec")
-            rospy.sleep(3)
-            print("sleep done")
+            rospy.sleep(2)
+        
+        control_reset()
 
     except:
         pass
+
+def control_reset():
+    pub2 = rospy.Publisher(APOLLO_PAD_TOPIC, PadMessage, queue_size=10)
+    msg2 = PadMessage()
+    msg2.action = 2
+    msg2.driving_mode = 1 
+    
+    rospy.sleep(5)
+
+    for i in range(20):
+        pub2.publish(msg2)
+        print("--publish pad message--")
+        print("driving action: ", msg2.action)
+        print("driving mode: ", msg2.driving_mode)
+
+def setup():
+    rospy.Subscriber(CALRA_WAYPOINTS_TOPIC, Path, on_waypoint_input)
+    rospy.Subscriber(CARLA_PLAYER_VEHICLE_TOPIC, String, on_player_vehicle_input)
+
+def main():
+    #rospy.init_node("carla_waypoints_to_apollo") 
+    setup()
+
+    
  
 
 if __name__ == "__main__":
