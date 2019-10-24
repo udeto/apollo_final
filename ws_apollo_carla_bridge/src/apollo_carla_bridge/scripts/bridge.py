@@ -9,7 +9,7 @@ import carla_gps
 import chassis_faker
 import control_transform
 import carla_waypoints
-import pad_faker
+
 
 CARLA_LIDAR_TOPIC = '/lidar_0'
 CARLA_CAMERA_LONG_TOPIC = '/camera_long/image_raw'
@@ -21,9 +21,21 @@ APOLLO_CAMERA_SHORT_TOPIC = '/apollo/sensor/camera/obstacle/front_6mm'
 APOLLO_CAMERA_SHORT_TOPIC2 = '/apollo/sensor/camera/traffic/image_short'
 
 def forward_callback(data, pub):
+    """
+    Foreward recieved data
+
+    :param data: recieved ros topics
+    :type data: Image, PointCloud2
+    :param pub: publishers
+    :type pub: rospy.Publisher
+    """
     pub.publish(data)
 
 def main():
+    """
+    Init node carla_to_apollo_data and setup subscribers and publishers
+
+    """
     rospy.init_node('carla_to_apollo_data')
 
     carla_gps.setup()

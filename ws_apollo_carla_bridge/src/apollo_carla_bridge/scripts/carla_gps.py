@@ -28,24 +28,38 @@ APOLLO_GPS_BESTPOSE_TOPIC = '/apollo/sensor/gnss/best_pose'
 CARLA_PLAYER_VEHICLE_TOPIC = '/player_vehicle'
 
 def euler_from_quarterion(x, y, z, w):
+    """
+    Convert quarterion into euler angles
 
-        import math
-        t0 = +2.0 * (w * x + y * z)
-        t1 = +1.0 - 2.0 * (x * x + y * y)
-        X = math.degrees(math.atan2(t0, t1))
+    :param x,y,z,w: quaterion
+    :type x,y,z,w: quaterion
+    :return: euler angles (roll, pitch, yaw)
+    """
+    import math
+    t0 = +2.0 * (w * x + y * z)
+    t1 = +1.0 - 2.0 * (x * x + y * y)
+    X = math.degrees(math.atan2(t0, t1))
 
-        t2 = +2.0 * (w * y - z * x)
-        t2 = +1.0 if t2 > +1.0 else t2
-        t2 = -1.0 if t2 < -1.0 else t2
-        Y = math.degrees(math.asin(t2))
+    t2 = +2.0 * (w * y - z * x)
+    t2 = +1.0 if t2 > +1.0 else t2
+    t2 = -1.0 if t2 < -1.0 else t2
+    Y = math.degrees(math.asin(t2))
 
-        t3 = +2.0 * (w * z + x * y)
-        t4 = +1.0 - 2.0 * (y * y + z * z)
-        Z = math.degrees(math.atan2(t3, t4))
+    t3 = +2.0 * (w * z + x * y)
+    t4 = +1.0 - 2.0 * (y * y + z * z)
+    Z = math.degrees(math.atan2(t3, t4))
 
-        return X, Y, Z
+    return X, Y, Z
 
 def forward_gps(data, pubs):
+    """
+    Forward the GPS data from carla to apollo
+
+    :param data: player_vehicle topic input
+    :type data: string
+    :param pubs: publishers to foreward the information
+    :type pubs: rospy.Publisher
+    """
     pub_gps = pubs[0]
     pub_corrected_imu = pubs[1]
     pub_gps_status = pubs[2]
@@ -121,11 +135,11 @@ def forward_gps(data, pubs):
     p.linear_velocity.z = float(arr[12])
 
     msg_gps = Gps()
-    msg_gps.header.timestamp_sec = rospy.get_time()
+    msg_gps.header.timestamp_sec = float(arr[17])
     msg_gps.localization.CopyFrom(p)
 
     msg_corrected_imu = CorrectedImu()
-    msg_corrected_imu.header.timestamp_sec = rospy.get_time()
+    msg_corrected_imu.header.timestamp_sec = float(arr[17])
     msg_corrected_imu.imu.CopyFrom(p)
 
     pub_corrected_imu.publish(msg_corrected_imu)
@@ -149,6 +163,11 @@ def forward_gps(data, pubs):
     chassis[0].publish(chassis[1])
 
 def setup():
+    """
+    Setup publishers and subscribers
+
+    """
+
     pub_gps = rospy.Publisher(APOLLO_GPS_TOPIC, Gps, queue_size=1)
     pub_corrected_imu = rospy.Publisher(APOLLO_CORRECTED_IMU_TOPIC, CorrectedImu, queue_size=1)
     pub_gps_status = rospy.Publisher(APOLLO_GPS_STATUS_TOPIC, GnssStatus, queue_size=1)
@@ -157,6 +176,10 @@ def setup():
     rospy.Subscriber(CARLA_PLAYER_VEHICLE_TOPIC, String, forward_gps, [pub_gps, pub_corrected_imu, pub_gps_status, pub_ins_status, pub_gps_bestpose, chassis_faker.setup()], queue_size=1)
 
 def main():
+    """
+    Initialize gps_faker node and run setup
+
+    """
     rospy.init_node('gps_faker')
     setup()
     rospy.spin()

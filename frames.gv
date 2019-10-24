@@ -1,9 +1,0 @@
-digraph G {
-"velodyne64" -> "radar_front"[label="Broadcaster: /test_tf_broadcaster\nAverage rate: 2000.930 Hz\nMost recent transform: 415.900 \nBuffer length: 1.433 sec\n"];
-"novatel" -> "velodyne64"[label="Broadcaster: /test_tf_broadcaster\nAverage rate: 2000.930 Hz\nMost recent transform: 415.900 \nBuffer length: 1.433 sec\n"];
-"short_camera" -> "radar"[label="Broadcaster: /test_tf_broadcaster\nAverage rate: 2000.930 Hz\nMost recent transform: 415.900 \nBuffer length: 1.433 sec\n"];
-"velodyne64" -> "short_camera"[label="Broadcaster: /test_tf_broadcaster\nAverage rate: 2000.930 Hz\nMost recent transform: 415.900 \nBuffer length: 1.433 sec\n"];
-"short_camera" -> "long_camera"[label="Broadcaster: /test_tf_broadcaster\nAverage rate: 2000.930 Hz\nMost recent transform: 415.900 \nBuffer length: 1.433 sec\n"];
-"localization" -> "novatel"[label="Broadcaster: /test_tf_broadcaster\nAverage rate: 2000.930 Hz\nMost recent transform: 415.900 \nBuffer length: 1.433 sec\n"];
-"world" -> "localization"[label="Broadcaster: /localization\nAverage rate: 780000.000 Hz\nMost recent transform: 0.000 \nBuffer length: 0.000 sec\n"];
-}

@@ -12,6 +12,14 @@ APOLLO_CHASSIS_DETAIL_TOPIC = '/apollo/canbus/chassis_detail'
 APOLLO_CONTROL_PAD_TOPIC = '/apollo/control/pad'
 
 def setup():
+    """
+    Setup the publisher for the chassis message and create the chassis message
+
+    :return: publisher for the chassis status message
+    :rtype: rospy.Publisher
+    :return: chassis status message
+    :rtype: Chassis
+    """
     pub = rospy.Publisher(APOLLO_CHASSIS_TOPIC, Chassis, queue_size=10)
     msg = Chassis()
     msg.engine_started = True
@@ -20,6 +28,10 @@ def setup():
     return [pub, msg]
 
 def main():
+    """
+    Not used in current setup
+    (provides opportunity to publish detailed cassis status of control pad message)
+    """
     #rospy.init_node('chassis_faker')
     
     pub1 = rospy.Publisher(APOLLO_CHASSIS_TOPIC, Chassis, queue_size=10)
